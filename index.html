@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+body {
+	background: #1b1b1b none;
+	color: #f0f0f0;
+	font: 18px/21px Helvetica, Arial, sans-serif;
+}
+#container {
+	text-align: center;
+	width: 960px;
+	margin: 0 auto;
+}
+#player {
+	width: 100%;
+}
+form {
+	width: 100%;
+}
+input {
+	font-size: 25px;
+	padding: 0.2em;
+}
+input[type=text]
+{
+	border-radius: 8px;
+	border: 3px solid #333;
+	width: 6em;
+}
+</style>
+<title>YouTube Encore</title>
+</head>
+<body>
+    <div id="container">
+    	<h1>YouTube Encore</h1>
+        <div id="player"></div>
+        <form action="javascript:updateTimes()">
+            <p><input type="text" id="startTime" name="startTime" value="0:00" /> &mdash; <input type="text" id="endTime" name="endTime" value="0:00" /> <input type="submit" value="Loop" /></p>
+        </form>
+		<div id="qrcode"></div>
+    </div>
+<script type="text/javascript" src="qr.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-3710255-4', 'youtubeencore.com');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>
+
