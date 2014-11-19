@@ -1,6 +1,7 @@
 // Add the YouTube API to the page.
 function addAPITag()
 {
+	// Create a <script> tag and add it before the first one in the markup
 	var tag = document.createElement('script');
 	tag.src = "https://www.youtube.com/iframe_api";
 	var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -9,11 +10,10 @@ function addAPITag()
 
 // The API calls this function when the iFrame is ready
 function onYouTubeIframeAPIReady() {
-	var videoID = getURLParams().v;
-	var player = new YT.Player('player', {
+	new YT.Player('player', {
 		height: '566',
 		width: '960',
-		videoId: videoID,
+		videoId: getURLParams().v,
 		events: {
 			'onReady': onPlayerReady,
 			'onStateChange': onPlayerStateChange
@@ -110,7 +110,7 @@ function secondsToTime(s)
 function timeToSeconds(t)
 {
 	var colonPos = t.indexOf(":");
-	return t.substring(0,colonPos) * 60 + t.substring(colonPos+1) * 1;
+	return t.slice(0,colonPos) * 60 + t.slice(colonPos+1) * 1;
 }
 
 // Get GET parameters
