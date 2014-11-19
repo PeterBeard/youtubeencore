@@ -91,7 +91,7 @@ function updateTimes(player)
 	var qr = qrcode(qrType, 'M');
 	qr.addData(url);
 	qr.make();
-	$('qrcode').innerHTML = qr.createImgTag();
+  qr.drawOnCanvas($('qrcanvas'));
 }
 
 // Convert a number of seconds to an mm:ss string

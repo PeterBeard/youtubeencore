@@ -11,12 +11,12 @@
         <form action="javascript:updateTimes()">
             <p><input type="text" id="startTime" name="startTime" value="0:00" /> &mdash; <input type="text" id="endTime" name="endTime" value="0:00" /> <input type="submit" value="Loop" /></p>
         </form>
-		<div id="qrcode"></div>
+    <canvas id="qrcanvas"></canvas>
 		<p>Save this bookmarklet to loop YouTube videos:<br /> <a href="javascript:(function() {var l=window.location.href;if(l.indexOf('youtube.com')>-1){var i=l.substr(l.indexOf('v=')+2,11);window.location='http://www.youtubeencore.com/watch?v='+i;}})()
 ">Watch on YTEncore</a></p>
 		<p style="font-size:70%">Code by <a href="https://www.peterbeard.co">Peter Beard</a>. Get it on <a href="https://github.com/PeterBeard/youtubeencore">GitHub</a>.</p>
     </div>
-<script type="text/javascript" src="qr.min.js"></script>
+<script type="text/javascript" src="qrcode.min.js"></script>
 <script type="text/javascript" src="main.min.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
