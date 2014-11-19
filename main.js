@@ -17,6 +17,11 @@ function onYouTubeIframeAPIReady() {
 	});
 }
 
+// Shamelessly stolen from jQuery
+function $(id) {
+	return document.getElementById(id);
+}
+
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
 	event.target.playVideo();
@@ -24,11 +29,11 @@ function onPlayerReady(event) {
 	var p = getURLParams();
 	if(p.startTime)
 	{
-		document.getElementById("startTime").value = p.startTime;
+		$("startTime").value = p.startTime;
 	}
 	if(p.endTime)
 	{
-		document.getElementById("endTime").value = p.endTime;
+		$("endTime").value = p.endTime;
 	}
 	// Start the video clock
 	setInterval(videoTick, 150);
@@ -39,11 +44,11 @@ var initEndTime = false;
 function onPlayerStateChange(event)
 {
 	if (event.data == YT.PlayerState.PLAYING && !initEndTime) {
-		if(document.getElementById("endTime").value == "0:00")
+		if($("endTime").value == "0:00")
 		{
-			document.getElementById("endTime").value = secondsToTime(player.getDuration());
+			$("endTime").value = secondsToTime(player.getDuration());
 		} else {
-			document.getElementById("endTime").value = secondsToTime(timeToSeconds(document.getElementById("endTime").value));
+			$("endTime").value = secondsToTime(timeToSeconds($("endTime").value));
 		}
 		initEndTime = true;
 		updateTimes();
@@ -54,8 +59,8 @@ function onPlayerStateChange(event)
 function videoTick()
 {
 	var t = player.getCurrentTime();
-	var end = timeToSeconds(document.getElementById("endTime").value);
-	var start = timeToSeconds(document.getElementById("startTime").value);
+	var end = timeToSeconds($("endTime").value);
+	var start = timeToSeconds($("startTime").value);
 	// Return to the beginning of the loop period
 	if(t >= end && end > start)
 	{
@@ -67,10 +72,10 @@ function videoTick()
 function updateTimes()
 {
 	var videoID = getURLParams().v;
-	var startTime = secondsToTime(timeToSeconds(document.getElementById('startTime').value));
-	var endTime = secondsToTime(timeToSeconds(document.getElementById('endTime').value));
-	document.getElementById("startTime").value = startTime;
-	document.getElementById("endTime").value = endTime;
+	var startTime = secondsToTime(timeToSeconds($('startTime').value));
+	var endTime = secondsToTime(timeToSeconds($('endTime').value));
+	$("startTime").value = startTime;
+	$("endTime").value = endTime;
 	player.seekTo(timeToSeconds(startTime), true);
 	// Create a QR code for sharing and such
 	var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + startTime + '&endTime=' + endTime;
@@ -78,7 +83,7 @@ function updateTimes()
 	var qr = qrcode(qrType, 'M');
 	qr.addData(url);
 	qr.make();
-	document.getElementById('qrcode').innerHTML = qr.createImgTag();
+	$('qrcode').innerHTML = qr.createImgTag();
 }
 
 function secondsToTime(s)
