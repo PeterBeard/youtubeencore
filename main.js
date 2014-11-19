@@ -94,6 +94,7 @@ function updateTimes(player)
 	$('qrcode').innerHTML = qr.createImgTag();
 }
 
+// Convert a number of seconds to an mm:ss string
 function secondsToTime(s)
 {
 	var minutes = Math.floor(s/60);
@@ -104,12 +105,14 @@ function secondsToTime(s)
 	}
 	return minutes + ":" + seconds;
 }
+
 // Convert a time string (minutes:seconds) to a number of seconds
 function timeToSeconds(t)
 {
 	var colonPos = t.indexOf(":");
 	return t.substring(0,colonPos) * 60 + t.substring(colonPos+1) * 1;
 }
+
 // Get GET parameters
 function getURLParams()
 {
@@ -117,7 +120,9 @@ function getURLParams()
 	var prmarr = prmstr.split ("&");
 	var params = {};
 	
-	for ( var i = 0; i < prmarr.length; i++) {
+	// Iterate over the array of parameters, splitting them on '=' to get names and values
+	for (var i = 0; i < prmarr.length; i++)
+	{
 		var tmparr = prmarr[i].split("=");
 		params[tmparr[0]] = tmparr[1];
 	}
