@@ -1,9 +1,14 @@
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+// Add the YouTube API to the page.
+function addAPITag()
+{
+	var tag = document.createElement('script');
+	tag.src = "https://www.youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
 
 var player;
+// The API calls this function when the iFrame is ready
 function onYouTubeIframeAPIReady() {
 	var videoID = getURLParams().v;
 	player = new YT.Player('player', {
@@ -115,4 +120,7 @@ function getURLParams()
 	}
 	return params;
 }
+
+// Add the API
+addAPITag();
 
