@@ -7,11 +7,10 @@ function addAPITag()
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
-var player;
 // The API calls this function when the iFrame is ready
 function onYouTubeIframeAPIReady() {
 	var videoID = getURLParams().v;
-	player = new YT.Player('player', {
+	var player = new YT.Player('player', {
 		height: '566',
 		width: '960',
 		videoId: videoID,
@@ -41,7 +40,7 @@ function onPlayerReady(event) {
 		$("endTime").value = p.endTime;
 	}
 	// Start the video clock
-	setInterval(videoTick, 150);
+	setInterval(videoTick(event.target), 150);
 }
 
 // The API calls this function when the player's state changes.
@@ -51,30 +50,34 @@ function onPlayerStateChange(event)
 	if (event.data == YT.PlayerState.PLAYING && !initEndTime) {
 		if($("endTime").value == "0:00")
 		{
-			$("endTime").value = secondsToTime(player.getDuration());
+			$("endTime").value = secondsToTime(event.target.getDuration());
 		} else {
 			$("endTime").value = secondsToTime(timeToSeconds($("endTime").value));
 		}
 		initEndTime = true;
-		updateTimes();
+		updateTimes(event.target);
 	}
 }
 
 // Keep track of our position in the video and restart playback at the correct time
-function videoTick()
+function videoTick(player)
 {
-	var t = player.getCurrentTime();
-	var end = timeToSeconds($("endTime").value);
-	var start = timeToSeconds($("startTime").value);
-	// Return to the beginning of the loop period
-	if(t >= end && end > start)
+	// Use a closure to avoid having a global video player object
+	return function()
 	{
-		player.seekTo(start, true);
+		var t = player.getCurrentTime();
+		var end = timeToSeconds($("endTime").value);
+		var start = timeToSeconds($("startTime").value);
+		// Return to the beginning of the loop period
+		if(t >= end && end > start)
+		{
+			player.seekTo(start, true);
+		}
 	}
 }
 
 // Update the loop times and seek to the start of the loop
-function updateTimes()
+function updateTimes(player)
 {
 	var videoID = getURLParams().v;
 	var startTime = secondsToTime(timeToSeconds($('startTime').value));
