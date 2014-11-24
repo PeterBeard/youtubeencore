@@ -8,7 +8,7 @@
     <div id="container">
     	<h1>YouTube Encore</h1>
         <div id="player"></div>
-        <form action="javascript:updateTimes()">
+        <form id="loop-times" action="javascript:void(0);">
             <p><input type="text" id="startTime" name="startTime" value="0:00" /> &mdash; <input type="text" id="endTime" name="endTime" value="0:00" /> <input type="submit" value="Loop" /></p>
         </form>
     <canvas id="qrcanvas"></canvas>
@@ -17,7 +17,7 @@
 		<p style="font-size:70%">Code by <a href="https://www.peterbeard.co">Peter Beard</a>. Get it on <a href="https://github.com/PeterBeard/youtubeencore">GitHub</a>.</p>
     </div>
 <script type="text/javascript" src="qr.min.js"></script>
-<script type="text/javascript" src="main.min.js"></script>
+<script type="text/javascript" src="main.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -10,7 +10,7 @@ function addAPITag()
 
 // The API calls this function when the iFrame is ready
 function onYouTubeIframeAPIReady() {
-	new YT.Player('player', {
+	var player = new YT.Player('player', {
 		height: '566',
 		width: '960',
 		videoId: getURLParams().v,
@@ -19,6 +19,8 @@ function onYouTubeIframeAPIReady() {
 			'onStateChange': onPlayerStateChange
 		}
 	});
+	// Add an event listener to the HTML form
+	$('loop-times').addEventListener('submit', updateTimes(player));
 }
 
 // Shamelessly stolen from jQuery
@@ -79,19 +81,22 @@ function videoTick(player)
 // Update the loop times and seek to the start of the loop
 function updateTimes(player)
 {
-	var videoID = getURLParams().v;
-	var startTime = secondsToTime(timeToSeconds($('startTime').value));
-	var endTime = secondsToTime(timeToSeconds($('endTime').value));
-	$("startTime").value = startTime;
-	$("endTime").value = endTime;
-	player.seekTo(timeToSeconds(startTime), true);
-	// Create a QR code for sharing and such
-	var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + startTime + '&endTime=' + endTime;
-	var qrType = Math.ceil(url.length/18);
-	var qr = qrcode(qrType, 'M');
-	qr.addData(url);
-	qr.make();
-  qr.drawOnCanvas($('qrcanvas'));
+	// Closure over the player variable
+	return function() {
+		var videoID = getURLParams().v;
+		var startTime = secondsToTime(timeToSeconds($('startTime').value));
+		var endTime = secondsToTime(timeToSeconds($('endTime').value));
+		$("startTime").value = startTime;
+		$("endTime").value = endTime;
+		player.seekTo(timeToSeconds(startTime), true);
+		// Create a QR code for sharing and such
+		var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + startTime + '&endTime=' + endTime;
+		var qrType = Math.ceil(url.length/18);
+		var qr = qrcode(qrType, 'M');
+		qr.addData(url);
+		qr.make();
+		qr.drawOnCanvas($('qrcanvas'));
+	};
 }
 
 // Convert a number of seconds to an mm:ss string
