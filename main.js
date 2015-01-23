@@ -21,6 +21,9 @@ function onYouTubeIframeAPIReady() {
 	});
 	// Add an event listener to the HTML form
 	$('loop-times').addEventListener('submit', updateTimes(player));
+	// Update the loop times once before the video runs
+	var f = updateTimes(player);
+	f();
 }
 
 // Shamelessly stolen from jQuery
@@ -88,7 +91,9 @@ function updateTimes(player)
 		var endTime = secondsToTime(timeToSeconds($('endTime').value));
 		$("startTime").value = startTime;
 		$("endTime").value = endTime;
-		player.seekTo(timeToSeconds(startTime), true);
+		// If the player is ready, seek to the start time
+		if(player.seekTo)
+			player.seekTo(timeToSeconds(startTime), true);
 		// Create a QR code for sharing and such
 		var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + startTime + '&endTime=' + endTime;
 		var qrType = Math.ceil(url.length/18);
