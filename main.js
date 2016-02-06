@@ -22,7 +22,7 @@ function onYouTubeIframeAPIReady() {
 	$('loop-times').addEventListener('submit', updateTimes(player));
     $('reset-times').addEventListener('click', function() {
         resetTimes(player);
-        startLoop(player);
+        updateTimes(player)();
     });
     // Start/End set buttons
     $('loop-set-start').addEventListener('click', function() {
@@ -33,9 +33,21 @@ function onYouTubeIframeAPIReady() {
         var currTime = player.getCurrentTime();
         $('endTime').value = secondsToTime(currTime);
     });
+    // Show/hide QR code
+    $('qr-button').addEventListener('click', function() {
+        updateQRCode();
+        $('qrcontainer').style.opacity = 1;
+        $('qrcontainer').style.visibility = 'visible';
+    });
+    $('qrcontainer').addEventListener('click', function() {
+        if($('qrcontainer').style.visibility == 'visible')
+        {
+            $('qrcontainer').style.opacity = 0;
+            $('qrcontainer').style.visibility = 'hidden';
+        }
+    });
 	// Update the loop times once before the video runs
-	var f = updateTimes(player);
-	f();
+	updateTimes(player)();
 }
 
 // Reset the loop endpoints
@@ -53,6 +65,7 @@ function resetTimes(player) {
     } else {
         $("endTime").value = secondsToTime(player.getDuration());
     }
+    console.log($("endTime").value);
 }
 
 // Start the playback loop
@@ -98,7 +111,6 @@ function updateTimes(player)
 {
 	// Closure over the player variable
 	return function() {
-		var videoID = getURLParams().v;
 		var startTime = timeToSeconds($('startTime').value);
 		var endTime = timeToSeconds($('endTime').value);
         var duration = 86400; // 24 hours is a good maximum
@@ -113,14 +125,20 @@ function updateTimes(player)
             endTime = duration;
 		$("endTime").value = secondsToTime(endTime);
         startLoop(player)
-		// Create a QR code for sharing and such
-		var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + secondsToTime(startTime) + '&endTime=' + secondsToTime(endTime);
-		var qrType = Math.ceil(url.length/18);
-		var qr = qrcode(qrType, 'M');
-		qr.addData(url);
-		qr.make();
-		qr.drawOnCanvas($('qrcanvas'));
 	};
+}
+
+// Update the QR code
+function updateQRCode() {
+    var videoID = getURLParams().v;
+    var startTime = timeToSeconds($('startTime').value);
+    var endTime = timeToSeconds($('endTime').value);
+    var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + secondsToTime(startTime) + '&endTime=' + secondsToTime(endTime);
+    var qrType = Math.ceil(url.length/18);
+    var qr = qrcode(qrType, 'M');
+    qr.addData(url);
+    qr.make();
+    qr.drawOnCanvas($('qrcanvas'), 8);
 }
 
 // Convert a number of seconds to an mm:ss string
@@ -162,4 +180,3 @@ function getURLParams()
 
 // Add the API
 addAPITag();
-
