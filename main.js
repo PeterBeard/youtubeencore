@@ -139,7 +139,9 @@ function secondsToTime(s)
 function timeToSeconds(t)
 {
 	var colonPos = t.indexOf(":");
-	return t.slice(0,colonPos) * 60 + t.slice(colonPos+1) * 1;
+    if(colonPos > -1)
+    	return t.slice(0,colonPos) * 60 + t.slice(colonPos+1) * 1;
+    return t * 1;
 }
 
 // Get GET parameters
