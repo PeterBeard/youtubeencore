@@ -15,15 +15,42 @@ function onYouTubeIframeAPIReady() {
 		width: '960',
 		videoId: getURLParams().v,
 		events: {
-			'onReady': onPlayerReady,
-			'onStateChange': onPlayerStateChange
+			'onReady': onPlayerReady
 		}
 	});
 	// Add an event listener to the HTML form
 	$('loop-times').addEventListener('submit', updateTimes(player));
+    $('reset-times').addEventListener('click', function() {
+        resetTimes(player);
+        startLoop(player);
+    });
 	// Update the loop times once before the video runs
 	var f = updateTimes(player);
 	f();
+}
+
+// Reset the loop endpoints
+function resetTimes(player) {
+    var p = getURLParams();
+    if(p.startTime)
+    {
+        $("startTime").value = p.startTime;
+    } else {
+        $("startTime").value = secondsToTime(0);
+    }
+    if(p.endTime)
+    {
+        $("endTime").value = p.endTime;
+    } else {
+        $("endTime").value = secondsToTime(player.getDuration());
+    }
+}
+
+// Start the playback loop
+function startLoop(player) {
+    var start = timeToSeconds($("startTime").value);
+    if(player.seekTo)
+        player.seekTo(start, true);
 }
 
 // Shamelessly stolen from jQuery
@@ -35,33 +62,9 @@ function $(id) {
 function onPlayerReady(event) {
 	event.target.playVideo();
 	// Get start and end times out of the URL parameters
-	var p = getURLParams();
-	if(p.startTime)
-	{
-		$("startTime").value = p.startTime;
-	}
-	if(p.endTime)
-	{
-		$("endTime").value = p.endTime;
-	}
+    resetTimes(event.target)
 	// Start the video clock
 	setInterval(videoTick(event.target), 150);
-}
-
-// The API calls this function when the player's state changes.
-var initEndTime = false;
-function onPlayerStateChange(event)
-{
-	if (event.data == YT.PlayerState.PLAYING && !initEndTime) {
-		if($("endTime").value == "0:00")
-		{
-			$("endTime").value = secondsToTime(event.target.getDuration());
-		} else {
-			$("endTime").value = secondsToTime(timeToSeconds($("endTime").value));
-		}
-		initEndTime = true;
-		updateTimes(event.target);
-	}
 }
 
 // Keep track of our position in the video and restart playback at the correct time
@@ -74,9 +77,9 @@ function videoTick(player)
 		var end = timeToSeconds($("endTime").value);
 		var start = timeToSeconds($("startTime").value);
 		// Return to the beginning of the loop period
-		if(t >= end && end > start)
+		if(t >= end && end > start && start < player.getDuration())
 		{
-			player.seekTo(start, true);
+            startLoop(player);
 		}
 	}
 }
@@ -87,15 +90,22 @@ function updateTimes(player)
 	// Closure over the player variable
 	return function() {
 		var videoID = getURLParams().v;
-		var startTime = secondsToTime(timeToSeconds($('startTime').value));
-		var endTime = secondsToTime(timeToSeconds($('endTime').value));
-		$("startTime").value = startTime;
-		$("endTime").value = endTime;
-		// If the player is ready, seek to the start time
-		if(player.seekTo)
-			player.seekTo(timeToSeconds(startTime), true);
+		var startTime = timeToSeconds($('startTime').value);
+		var endTime = timeToSeconds($('endTime').value);
+        var duration = 86400; // 24 hours is a good maximum
+        if(player.getDuration)
+            duration = player.getDuration();
+        // Start time must be non-negative and < video length
+        if(startTime < 0 || startTime >= duration)
+            startTime = 0;
+		$("startTime").value = secondsToTime(startTime);
+        // End time must be after start time and <= video length
+        if(endTime <= startTime || endTime > duration)
+            endTime = duration;
+		$("endTime").value = secondsToTime(endTime);
+        startLoop(player)
 		// Create a QR code for sharing and such
-		var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + startTime + '&endTime=' + endTime;
+		var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + secondsToTime(startTime) + '&endTime=' + secondsToTime(endTime);
 		var qrType = Math.ceil(url.length/18);
 		var qr = qrcode(qrType, 'M');
 		qr.addData(url);

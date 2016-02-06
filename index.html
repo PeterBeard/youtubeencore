@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">body{background:#1b1b1b none;color:#f0f0f0;font:18px/21px Helvetica, Arial, sans-serif}#container{text-align:center;width:960px;margin:0 auto}input{font-size:25px;padding:.2em}input[type=text]{border-radius:8px;border:3px solid #333;width:6em}#player,form{width:100%}a{color:#66f;}</style>
+    <link rel="stylesheet" type="text/css" href="styles.min.css">
 <title>YouTube Encore</title>
 </head>
 <body>
@@ -9,7 +9,10 @@
     	<h1>YouTube Encore</h1>
         <div id="player"></div>
         <form id="loop-times" action="javascript:void(0);">
-            <p><input type="text" id="startTime" name="startTime" value="0:00" /> &mdash; <input type="text" id="endTime" name="endTime" value="0:00" /> <input type="submit" value="Loop" /></p>
+            <p><input type="text" id="startTime" name="startTime" value="0:00" /> 
+            <a id="reset-times" href="javascript:resetTimes()" title="Reset loop endpoints">&mdash;</a> 
+            <input type="text" id="endTime" name="endTime" value="0:00" /> 
+            <input type="submit" value="Loop" /></p>
         </form>
     <canvas id="qrcanvas"></canvas>
 		<p>Save this bookmarklet to loop YouTube videos:<br /> <a href="javascript:(function() {var l=window.location.href;if(l.indexOf('youtube.com')>-1){var i=l.substr(l.indexOf('v=')+2,11);window.location='http://www.youtubeencore.com/watch?v='+i;}})()
