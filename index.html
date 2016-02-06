@@ -9,9 +9,11 @@
     	<h1>YouTube Encore</h1>
         <div id="player"></div>
         <form id="loop-times" action="javascript:void(0);">
-            <p><input type="text" id="startTime" name="startTime" value="0:00" /> 
-            <a id="reset-times" href="javascript:resetTimes()" title="Reset loop endpoints">&mdash;</a> 
-            <input type="text" id="endTime" name="endTime" value="0:00" /> 
+            <p><input type="text" id="startTime" name="startTime" value="0:00" />
+            <button type="button" id="loop-set-start">[</button> 
+            <a id="reset-times" href="#" title="Reset loop endpoints">&mdash;</a> 
+            <input type="text" id="endTime" name="endTime" value="0:00" />
+            <button type="button" id="loop-set-end">]</button> 
             <input type="submit" value="Loop" /></p>
         </form>
     <canvas id="qrcanvas"></canvas>

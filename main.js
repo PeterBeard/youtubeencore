@@ -18,11 +18,20 @@ function onYouTubeIframeAPIReady() {
 			'onReady': onPlayerReady
 		}
 	});
-	// Add an event listener to the HTML form
+	// Add event listeners to the HTML form
 	$('loop-times').addEventListener('submit', updateTimes(player));
     $('reset-times').addEventListener('click', function() {
         resetTimes(player);
         startLoop(player);
+    });
+    // Start/End set buttons
+    $('loop-set-start').addEventListener('click', function() {
+        var currTime = player.getCurrentTime();
+        $('startTime').value = secondsToTime(currTime);
+    });
+    $('loop-set-end').addEventListener('click', function() {
+        var currTime = player.getCurrentTime();
+        $('endTime').value = secondsToTime(currTime);
     });
 	// Update the loop times once before the video runs
 	var f = updateTimes(player);
@@ -77,7 +86,7 @@ function videoTick(player)
 		var end = timeToSeconds($("endTime").value);
 		var start = timeToSeconds($("startTime").value);
 		// Return to the beginning of the loop period
-		if(t >= end && end > start && start < player.getDuration())
+		if(t >= end && end > start)
 		{
             startLoop(player);
 		}
