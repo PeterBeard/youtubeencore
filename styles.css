@@ -29,6 +29,9 @@ input[type=submit]:hover {
 a {
     color:#66f;
 }
+h1 a {
+    color: inherit;
+}
 a#reset-times {
     color: inherit;
     text-decoration: none;
