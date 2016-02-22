@@ -133,7 +133,7 @@ function updateQRCode() {
     var videoID = getURLParams().v;
     var startTime = timeToSeconds($('startTime').value);
     var endTime = timeToSeconds($('endTime').value);
-    var url = 'http://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + secondsToTime(startTime) + '&endTime=' + secondsToTime(endTime);
+    var url = 'https://www.youtubeencore.com/watch?v=' + videoID + '&startTime=' + secondsToTime(startTime) + '&endTime=' + secondsToTime(endTime);
     var qrType = Math.ceil(url.length/18);
     var qr = qrcode(qrType, 'M');
     qr.addData(url);
