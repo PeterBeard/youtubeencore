@@ -65,7 +65,6 @@ function resetTimes(player) {
     } else {
         $("endTime").value = secondsToTime(player.getDuration());
     }
-    console.log($("endTime").value);
 }
 
 // Start the playback loop
@@ -103,6 +102,14 @@ function videoTick(player)
 		{
             startLoop(player);
 		}
+        // Make sure the times are valid
+        if(end > player.getDuration())
+        {
+            $("endTime").value = secondsToTime(player.getDuration());
+        }
+        if(start >= end || start < 0) {
+            $("startTime").value = 0;
+        }
 	}
 }
 
